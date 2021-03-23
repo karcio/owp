@@ -130,3 +130,5 @@ dmypy.json
 
 virtenv
 .test
+
+data/
