@@ -10,9 +10,10 @@ services:
     volumes:
           - ./data:/var/lib/postgresql/data
           - ./initdb.sql:/docker-entrypoint-initdb.d/initdb.sql
-
+    
     ports:
-        - 5432:5432
+        - 5433:5432
+   
     networks:
         - postgres
     restart:             unless-stopped
