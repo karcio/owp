@@ -12,7 +12,7 @@ API_KEY = '8d0d43256b8bfb855fd1750d1bd612cd'
 CITY = 'Celbridge,IE'
 HOST = '192.168.178.71'
 PORT = '5433'
-DATABASE = 'owpdb'
+DATABASE = 'owrdb'
 DBUSER = 'dbuser'
 DBPASSWORD = 'pa88w0rd'
 
