@@ -1,0 +1,34 @@
+version:                 '3.5'
+services:
+  postgres:
+    container_name:      postgresowp
+    image:               postgres:11.11
+    environment:
+      POSTGRES_USER:     postgres
+      POSTGRES_PASSWORD: pa88w0rd
+      PGDATA:            /var/lib/postgresql/data
+    volumes:
+          - ./data:/var/lib/postgresql/data
+          - ./initdb.sql:/docker-entrypoint-initdb.d/initdb.sql
+    
+    ports:
+        - 5433:5432
+   
+    networks:
+        - postgres
+    restart:             unless-stopped
+
+  app:
+    container_name:      owp-app
+    build:               .
+    networks:
+      - postgres
+    restart:             unless-stopped
+
+networks:
+  postgres:
+    driver:              bridge
+
+volumes:
+    postgres:
+    app:
