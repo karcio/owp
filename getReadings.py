@@ -1,21 +1,21 @@
+import configparser
 from pyowm import OWM
 import logging
 import psycopg2
 from datetime import datetime
 import time
-#from config import configuration
+from config import configuration
 
 logging.basicConfig(
     format='%(asctime)s - %(levelname)s:%(message)s', level=logging.INFO)
 
-API_KEY = '8d0d43256b8bfb855fd1750d1bd612cd'
-CITY = 'Celbridge,IE'
-HOST = '192.168.178.71'
-PORT = '5433'
-DATABASE = 'owrdb'
-DBUSER = 'dbuser'
-DBPASSWORD = 'pa88w0rd'
-
+API_KEY = configuration().getApiKey()
+CITY = configuration().getCity()
+HOST = configuration().getHost()
+PORT = configuration().getPort()
+DATABASE = configuration().getDatabase()
+DBUSER = configuration().getDatabaseUser()
+DBPASSWORD = configuration().getDatabasePass()
 
 while True:
     owm = OWM(API_KEY)
@@ -30,18 +30,21 @@ while True:
 
         data = {"temp": temperature, "press": pressure, "humi": humidity}
         logging.info(data)
+        logging.info(' data received ...')
 
     except:
         logging.error(' no connection to owm ...')
-    
+
     try:
 
-        connection = psycopg2.connect(user=DBUSER, password=DBPASSWORD, host=HOST, port=PORT, database=DATABASE)
+        connection = psycopg2.connect(
+            user=DBUSER, password=DBPASSWORD, host=HOST, port=PORT, database=DATABASE)
         cursor = connection.cursor()
 
-        sql = "insert into readings (temperature, pressure, humidity, lastupdate) values ('" + str(data['temp']) + "', '" + str(data['press']) + "', '" + str(data['humi']) + "', '" + datetime.now().isoformat() + "')"
+        sql = "insert into readings (temperature, pressure, humidity, lastupdate) values ('" + str(
+            data['temp']) + "', '" + str(data['press']) + "', '" + str(data['humi']) + "', '" + datetime.now().isoformat() + "')"
 
-        logging.info('start ingestion ...')
+        logging.info(' start ingestion ...')
         cursor.execute(sql)
         logging.info(sql)
         connection.commit()
