@@ -19,7 +19,7 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-5. edit env 
+5. edit env `config.properties`
 ```
 [APP]
 API_KEY=
