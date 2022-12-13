@@ -1,4 +1,3 @@
-import configparser
 from pyowm import OWM
 import logging
 import psycopg2
@@ -27,8 +26,10 @@ while True:
         humidity = w.humidity
         temperature = w.temperature('celsius')['temp']
         pressure = w.pressure['press']
+        wind = w.wind()['speed']
 
-        data = {"temp": temperature, "press": pressure, "humi": humidity}
+        data = {"temp": temperature, "press": pressure,
+                "humi": humidity, "wind_speed": wind}
         logging.info(data)
         logging.info(' data received ...')
 
@@ -41,12 +42,11 @@ while True:
             user=DBUSER, password=DBPASSWORD, host=HOST, port=PORT, database=DATABASE)
         cursor = connection.cursor()
 
-        sql = "insert into readings (temperature, pressure, humidity, lastupdate) values ('" + str(
-            data['temp']) + "', '" + str(data['press']) + "', '" + str(data['humi']) + "', '" + datetime.now().isoformat() + "')"
+        sql = "insert into readings (temperature, pressure, humidity, windspeed, lastupdate) values ('" + str(
+            data['temp']) + "', '" + str(data['press']) + "', '" + str(data['humi']) + "', '" + str(data['wind_speed']) + "', '" + datetime.now().isoformat() + "')"
 
         logging.info(' start ingestion ...')
         cursor.execute(sql)
-        logging.info(sql)
         connection.commit()
         cursor.close()
         connection.close()
