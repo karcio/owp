@@ -41,5 +41,5 @@ python getReadings.py
 ## docker-compose run application
 ```
 docker-compose build
-docker-compose up
+docker-compose up -d
 ```
