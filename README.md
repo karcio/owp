@@ -1,4 +1,4 @@
-# owp
+# owp (openweather project)
 
 ## manual start application
 1. install python3
