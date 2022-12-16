@@ -23,15 +23,17 @@ while True:
         mgr = owm.weather_manager()
         observation = mgr.weather_at_place(CITY)
         w = observation.weather
+
         weather = w.status
         weatherdetailed = w.detailed_status
         humidity = w.humidity
         temperature = w.temperature('celsius')['temp']
         pressure = w.pressure['press']
         wind = w.wind()['speed']
+        city = CITY.split(',', 1)[0]
 
         data = {"temp": temperature, "press": pressure, "humi": humidity,
-                "wind_speed": wind, "weather": weather, "weather_detailed": weatherdetailed}
+                "wind_speed": wind, "weather": weather, "weather_detailed": weatherdetailed, "city": city}
         logging.info(data)
         logging.info(' data received ...')
 
@@ -44,8 +46,8 @@ while True:
             user=DBUSER, password=DBPASSWORD, host=HOST, port=PORT, database=DATABASE)
         cursor = connection.cursor()
 
-        sql = "insert into readings (temperature, pressure, humidity, windspeed, weather, weatherdetailed, lastupdate) values ('" + str(data['temp']) + "', '" + str(data['press']) + "', '" + str(
-            data['humi']) + "', '" + str(data['wind_speed']) + "', '" + str(data['weather']) + "', '" + str(data['weather_detailed']) + "', '" + datetime.now().isoformat() + "')"
+        sql = "insert into readings (temperature, pressure, humidity, windspeed, weather, weatherdetailed, city, lastupdate) values ('" + str(data['temp']) + "', '" + str(data['press']) + "', '" + str(
+            data['humi']) + "', '" + str(data['wind_speed']) + "', '" + str(data['weather']) + "', '" + str(data['weather_detailed']) + "', '" + str(data['city']) + "', '" + datetime.now().isoformat() + "')"
 
         logging.info(' start ingestion ...')
         cursor.execute(sql)

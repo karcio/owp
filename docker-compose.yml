@@ -2,7 +2,7 @@ version:                 '3.5'
 services:
   postgres:
     container_name:      owp-db
-    image:               postgres:11.11
+    image:               postgres:13.9
     environment:
       POSTGRES_USER:     postgres
       POSTGRES_PASSWORD: pa88w0rd
