@@ -133,3 +133,5 @@ virtenv
 
 data/
 config
+
+config.ini
