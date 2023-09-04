@@ -11,6 +11,8 @@ logging.basicConfig(
 config = configparser.ConfigParser()
 config.read('config.ini')
 
+timeout = 300
+
 
 def setupUrl():
     url_config = config['url']
@@ -93,7 +95,7 @@ def setDataPayload():
 
 
 def sendReadings():
-    db_config = config['db']
+    db_config = config['database']
     db_host = db_config['host']
     db_port = db_config['port']
     db_name = db_config['database']
@@ -144,11 +146,12 @@ def sendReadings():
             cursor.close()
             connection.close()
             logging.info('ingestion done ...')
+            logging.info(f'waiting {timeout} seconds for next query ...')
         except Exception as e:
             logging.error(e)
             logging.error('no database connection ...')
 
-        time.sleep(300)
+        time.sleep(timeout)
 
 
 def main():
