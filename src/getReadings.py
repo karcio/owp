@@ -120,7 +120,7 @@ def sendReadings():
             logging.error(e)
             logging.error('no database connection ...')
 
-        time.sleep(10)
+        time.sleep(300)
 
 
 def main():
