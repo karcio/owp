@@ -3,7 +3,7 @@ CREATE USER dbuser;
 ALTER USER dbuser WITH ENCRYPTED PASSWORD 'pa88w0rd';
 ALTER DATABASE owpdb OWNER TO dbuser;
 \c owpdb;
-CREATE TABLE readings(id serial PRIMARY KEY, temperature NUMERIC NULL, pressure NUMERIC NULL, humidity NUMERIC NULL, windspeed NUMERIC NULL, weather VARCHAR (10), weatherdetailed VARCHAR (20), lastupdate TIMESTAMP NOT NULL);
+CREATE TABLE readings(id serial PRIMARY KEY, main VARCHAR(10), description VARCHAR(15), temperature NUMERIC NULL, pressure NUMERIC NULL, humidity NUMERIC NULL, visibility NUMERIC NULL, windspeed NUMERIC NULL, clouds NUMERIC NULL, sunrise TIMESTAMP NULL, sunset TIMESTAMP NULL, city VARCHAR (10), lastupdate TIMESTAMP NOT NULL);
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO dbuser;
 GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO dbuser;
 GRANT ALL PRIVILEGES ON DATABASE owpdb TO dbuser;

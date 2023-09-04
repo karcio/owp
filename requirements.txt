@@ -1,3 +1,2 @@
-pyowm
+requests
 psycopg2-binary
-config
