@@ -41,11 +41,32 @@ def convertTimestamp(unix_epoch_time):
 
 
 def setDataPayload():
-
     try:
         logging.info('Getting data from open weather ...')
+
+        symbol = sendRequest()['weather'][0]['main']
+        
+        weather_mappings = {
+            "rain": ["rain","drizzle"],
+            "thunderstorm": ["thunderstorm"],
+            "snow": ["snow"],
+            "clear": ["clear"]
+        }
+
+        symbol_lower = symbol.lower()
+
+        rain = 1 if any(
+            cond in symbol_lower for cond in weather_mappings["rain"]) else 0
+        snow = 1 if any(
+            cond in symbol_lower for cond in weather_mappings["snow"]) else 0
+        clear = 1 if any(
+            cond in symbol_lower for cond in weather_mappings["clear"]) else 0
+        thunderstorm = 1 if any(
+            cond in symbol_lower for cond in weather_mappings["thunderstorm"]) else 0
+
+
         data = {
-            "main": sendRequest()['weather'][0]['main'],
+            "main": symbol, 
             "description": sendRequest()['weather'][0]['description'],
             "temperature": sendRequest()['main']['temp'],
             "pressure": sendRequest()['main']['pressure'],
@@ -56,6 +77,10 @@ def setDataPayload():
             "sunrise": convertTimestamp(sendRequest()['sys']['sunrise']),
             "sunset": convertTimestamp(sendRequest()['sys']['sunset']),
             "city": sendRequest()['name'],
+            "rain": rain,
+            "thunderstorm": thunderstorm,
+            "snow": snow,
+            "clear": clear,
             "lastupdate": datetime.now().isoformat()
         }
         
@@ -68,7 +93,6 @@ def setDataPayload():
 
 
 def sendReadings():
-
     db_config = config['db']
     db_host = db_config['host']
     db_port = db_config['port']
@@ -89,10 +113,10 @@ def sendReadings():
             sql = """
                     INSERT INTO readings 
                         (main, description, temperature, pressure, humidity, 
-                        visibility, windspeed, clouds, sunrise, sunset, city, 
-                        lastupdate) 
+                        visibility, windspeed, clouds, sunrise, sunset, city,
+                        rain, thunderstorm, snow, clear, lastupdate) 
                     VALUES 
-                        (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                        (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 """
 
             values = (
@@ -107,6 +131,10 @@ def sendReadings():
                 data['sunrise'],
                 data['sunset'],
                 data['city'],
+                data['rain'],
+                data['thunderstorm'],
+                data['snow'],
+                data['clear'],
                 data['lastupdate']
             )
 
