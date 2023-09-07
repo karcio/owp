@@ -5,6 +5,7 @@ from datetime import datetime
 import psycopg2
 import time
 
+
 logging.basicConfig(
     format='%(asctime)s - %(levelname)s:%(message)s', level=logging.INFO)
 
@@ -47,9 +48,8 @@ def setDataPayload():
         logging.info('Getting data from open weather ...')
 
         symbol = sendRequest()['weather'][0]['main']
-        
         weather_mappings = {
-            "rain": ["rain","drizzle"],
+            "rain": ["rain", "drizzle"],
             "thunderstorm": ["thunderstorm"],
             "snow": ["snow"],
             "clear": ["clear"]
@@ -64,8 +64,8 @@ def setDataPayload():
         clear = 1 if any(
             cond in symbol_lower for cond in weather_mappings["clear"]) else 0
         thunderstorm = 1 if any(
-            cond in symbol_lower for cond in weather_mappings["thunderstorm"]) else 0
-
+            cond in symbol_lower for cond in 
+            weather_mappings["thunderstorm"]) else 0
 
         data = {
             "main": symbol, 
@@ -85,7 +85,6 @@ def setDataPayload():
             "clear": clear,
             "lastupdate": datetime.now().isoformat()
         }
-        
 
         logging.info(data)
         return data
@@ -107,7 +106,8 @@ def sendReadings():
             data = setDataPayload()
             logging.info('connection to database ...')
             connection = psycopg2.connect(
-                user=db_username, password=db_password, host=db_host, port=db_port,
+                user=db_username, password=db_password, host=db_host,
+                port=db_port,
                 database=db_name)
 
             cursor = connection.cursor()
